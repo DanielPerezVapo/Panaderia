@@ -16,11 +16,30 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
 const pool = mysql.createPool({
-  host: process.env.MYSQL_HOST,
-  user: process.env.MYSQL_USER,
-  password: process.env.MYSQL_PASSWORD,
-  database: process.env.MYSQL_DATABASE
+  host: process.env.MYSQL_HOST || process.env.MYSQLHOST,
+  port: process.env.MYSQL_PORT || process.env.MYSQLPORT || 3306,
+  user: process.env.MYSQL_USER || process.env.MYSQLUSER,
+  password: process.env.MYSQL_PASSWORD || process.env.MYSQLPASSWORD,
+  database: process.env.MYSQL_DATABASE || process.env.MYSQLDATABASE,
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
+  connectTimeout: 60000
 })
+
+// Verificar conexión a la base de datos al iniciar
+pool.getConnection()
+  .then(connection => {
+    console.log('✅ Conectado a MySQL exitosamente')
+    console.log('   Host:', process.env.MYSQL_HOST || process.env.MYSQLHOST)
+    console.log('   Database:', process.env.MYSQL_DATABASE || process.env.MYSQLDATABASE)
+    connection.release()
+  })
+  .catch(err => {
+    console.error('❌ Error al conectar a MySQL:', err.message)
+    console.error('   Host intentado:', process.env.MYSQL_HOST || process.env.MYSQLHOST)
+    console.error('   Port intentado:', process.env.MYSQL_PORT || process.env.MYSQLPORT || 3306)
+  })
 
 const sessionStore = new MySQLStore({}, pool)
 
