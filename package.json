@@ -1,0 +1,28 @@
+{
+  "name": "panaderia",
+  "version": "1.0.0",
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@tailwindcss/vite": "^4.1.16",
+    "bcrypt": "^6.0.0",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "express-mysql-session": "^3.0.3",
+    "express-rate-limit": "^8.2.1",
+    "express-session": "^1.18.2",
+    "mysql2": "^3.15.3"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.16"
+  },
+  "scripts": {
+    "dev:css": "tailwindcss -i ./src/styles.css -o ./public/styles.css --watch",
+    "build:css": "tailwindcss -i ./src/styles.css -o ./public/styles.css --minify"
+  },
+  "description": ""
+}

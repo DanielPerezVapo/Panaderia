@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>Panadería Artesanal</title>
+</head>
+<body class="bg-stone-50 text-stone-800">
+    <!-- Header / Navigation -->
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex justify-between items-center">
+                <a href="#" class="flex items-center gap-3">
+                    <img src="https://www.esperanza.mx/assets/images/logo/logo_50_anios.png" alt="Logo" class="h-12">
+                    <span class="text-2xl font-light tracking-wide">Panadería</span>
+                </a>
+                <ul class="flex gap-8 list-none items-center">
+                    <li><a class="text-stone-600 hover:text-stone-900 transition-colors" href="#inicio">Inicio</a></li>
+                    <li><a class="text-stone-600 hover:text-stone-900 transition-colors" href="#productos">Productos</a></li>
+                    <li><a class="text-stone-600 hover:text-stone-900 transition-colors" href="#nosotros">Nosotros</a></li>
+                    <li><a class="text-stone-600 hover:text-stone-900 transition-colors" href="#contacto">Contacto</a></li>
+                    <li>
+                        <!-- Botón del carrito -->
+                        <button id="carritoBtn" class="relative px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors text-sm">
+                            🛒 Carrito
+                            <span id="carrito-count" class="absolute -top-2 -right-2 bg-red-600 text-white text-xs rounded-full w-6 h-6 flex items-center justify-center hidden">0</span>
+                        </button>
+                    </li>
+                    <li><a class="text-stone-600 hover:text-stone-900 transition-colors" href="#loginForm">Inicio de sesión</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Panel lateral del carrito -->
+    <div id="carrito-panel" class="fixed top-0 right-0 h-full w-96 bg-white shadow-2xl transform translate-x-full transition-transform duration-300 z-50 flex flex-col">
+        <div class="p-6 border-b flex justify-between items-center bg-stone-800 text-white">
+            <h2 class="text-2xl font-light">Mi Carrito</h2>
+            <button id="cerrar-carrito" class="text-white hover:text-stone-300 text-2xl">&times;</button>
+        </div>
+        
+        <div id="carrito-items" class="flex-1 overflow-y-auto p-6 space-y-4">
+            <!-- Los items del carrito se mostrarán aquí -->
+        </div>
+        
+        <div class="p-6 border-t bg-stone-50">
+            <div class="mb-4">
+                <div class="flex justify-between text-lg font-light mb-2">
+                    <span>Total de productos:</span>
+                    <span id="total-productos">0</span>
+                </div>
+                <div class="flex justify-between text-2xl font-light mb-4">
+                    <span>Total:</span>
+                    <span id="total-precio">$0.00</span>
+                </div>
+            </div>
+            <button id="guardar-carrito" class="w-full px-6 py-3 bg-stone-800 text-white rounded-lg hover:bg-stone-700 transition-colors mb-2">
+                Guardar en Base de Datos
+            </button>
+            <button id="vaciar-carrito" class="w-full px-6 py-3 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                Vaciar Carrito
+            </button>
+        </div>
+    </div>
+
+    <!-- Overlay para cerrar el panel (fondo semi-transparente gris) -->
+    <div id="carrito-overlay" class="fixed inset-0 bg-stone-900/40 z-40 hidden transition-opacity duration-300"></div>
+
+    <!-- Modal de Registro (Flotante) -->
+    <div id="registro-modal" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-lg shadow-2xl p-8 max-w-md w-full transform transition-all">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-light">Crear Cuenta Nueva</h3>
+                <button id="cerrar-registro" class="text-stone-600 hover:text-stone-900 text-2xl">&times;</button>
+            </div>
+            
+            <!-- Mensaje de respuesta del registro -->
+            <div id="mensaje-registro" class="mb-4 p-3 rounded-lg hidden"></div>
+
+            <form id="registroForm" class="space-y-4">
+                <div>
+                    <label for="reg-username" class="block text-sm font-light mb-2 text-stone-700">Usuario</label>
+                    <input 
+                        id="reg-username" 
+                        type="text" 
+                        name="username" 
+                        required
+                        minlength="3"
+                        placeholder="Elige un nombre de usuario"
+                        class="w-full px-4 py-3 border border-stone-300 rounded-lg focus:outline-none focus:border-stone-600 transition-colors">
+                </div>
+                
+                <div>
+                    <label for="reg-password" class="block text-sm font-light mb-2 text-stone-700">Contraseña</label>
+                    <input 
+                        id="reg-password" 
+                        type="password" 
+                        name="password" 
+                        required
+                        minlength="6"
+                        placeholder="Mínimo 6 caracteres"
+                        class="w-full px-4 py-3 border border-stone-300 rounded-lg focus:outline-none focus:border-stone-600 transition-colors">
+                </div>
+
+                <div>
+                    <label for="reg-password-confirm" class="block text-sm font-light mb-2 text-stone-700">Confirmar Contraseña</label>
+                    <input 
+                        id="reg-password-confirm" 
+                        type="password" 
+                        name="password-confirm" 
+                        required
+                        minlength="6"
+                        placeholder="Repite tu contraseña"
+                        class="w-full px-4 py-3 border border-stone-300 rounded-lg focus:outline-none focus:border-stone-600 transition-colors">
+                </div>
+                
+                <button 
+                    id="registroButton" 
+                    type="submit"
+                    class="w-full px-8 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors font-light">
+                    Registrarse
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="inicio" class="h-screen flex items-center justify-center bg-gradient-to-br from-amber-50 to-stone-100">
+        <div class="text-center px-6 max-w-3xl">
+            <h1 class="text-7xl font-light mb-6 tracking-tight">Pan Artesanal</h1>
+            <p class="text-2xl text-stone-600 mb-8 font-light">Hecho con amor, todos los días</p>
+            <a href="#productos" class="inline-block px-8 py-3 bg-stone-800 text-white rounded-full hover:bg-stone-700 transition-colors">Ver Productos</a>
+        </div>
+    </section>
+
+    <!-- Productos Section -->
+    <section id="productos" class="container mx-auto px-6 py-20">
+        <h2 class="text-4xl font-light text-center mb-16">Nuestros Productos</h2>
+        
+        <div id="productos-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <!-- Los productos se cargarán dinámicamente aquí -->
+        </div>
+    </section>
+
+    <!-- Nosotros Section -->
+    <section id="nosotros" class="bg-stone-800 text-white py-20">
+        <div class="container mx-auto px-6">
+            <div class="max-w-3xl mx-auto text-center">
+                <h2 class="text-4xl font-light mb-8">Nuestra Historia</h2>
+                <p class="text-lg font-light leading-relaxed mb-6">
+                    Desde 1975, hemos dedicado nuestra vida al arte del pan. Cada pieza se elabora con ingredientes seleccionados y técnicas tradicionales transmitidas de generación en generación.
+                </p>
+                <p class="text-lg font-light leading-relaxed">
+                    Nuestro compromiso es ofrecer productos frescos, naturales y deliciosos que lleven sabor y tradición a tu mesa cada día.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contacto Section -->
+    <section id="contacto" class="container mx-auto px-6 py-20">
+        <h2 class="text-4xl font-light text-center mb-16">Visítanos</h2>
+        
+        <div class="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
+            <!-- Información de contacto -->
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-xl font-light mb-2">Dirección</h3>
+                    <p class="text-stone-600">Av. Principal #123, Colonia Centro<br>Ciudad, Estado, CP 00000</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-light mb-2">Horario</h3>
+                    <p class="text-stone-600">Lunes a Sábado: 7:00 AM - 8:00 PM<br>Domingo: 8:00 AM - 3:00 PM</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-light mb-2">Contacto</h3>
+                    <p class="text-stone-600">Tel: (55) 1234-5678<br>Email: info@panaderia.com</p>
+                </div>
+            </div>
+
+            <!-- Formulario de inicio de sesión -->
+            <div class="bg-white rounded-lg shadow-sm p-8">
+                <h3 class="text-2xl font-light mb-6 text-center">Iniciar sesión</h3>
+                
+                <!-- Mensaje de respuesta -->
+                <div id="mensaje" class="mb-4 p-3 rounded-lg hidden"></div>
+    
+                <form id="loginForm" class="space-y-4">
+                    <div>
+                        <label for="username" class="block text-sm font-light mb-2 text-stone-700">Usuario</label>
+                        <input 
+                            id="username" 
+                            type="text" 
+                            name="username" 
+                            autocomplete="username" 
+                            required
+                            class="w-full px-4 py-3 border border-stone-300 rounded-lg focus:outline-none focus:border-stone-600 transition-colors">
+                    </div>
+                    
+                    <div>
+                        <label for="password" class="block text-sm font-light mb-2 text-stone-700">Contraseña</label>
+                        <input 
+                            id="password" 
+                            type="password" 
+                            name="password" 
+                            autocomplete="current-password" 
+                            required
+                            class="w-full px-4 py-3 border border-stone-300 rounded-lg focus:outline-none focus:border-stone-600 transition-colors">
+                    </div>
+                    
+                    <button 
+                        id="loginButton" 
+                        type="submit"
+                        class="w-full px-8 py-3 bg-stone-800 text-white rounded-lg hover:bg-stone-700 transition-colors font-light">
+                        Entrar
+                    </button>
+
+                    <div class="text-center mt-4">
+                        <button 
+                            id="mostrar-registro"
+                            type="button"
+                            class="text-stone-600 hover:text-stone-900 text-sm font-light underline">
+                            ¿No tienes cuenta? Regístrate aquí
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-stone-900 text-stone-400 py-8">
+        <div class="container mx-auto px-6 text-center">
+            <p class="font-light">&copy; 2025 Panadería Artesanal. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        let carrito = []; // Array para almacenar productos del carrito
+
+        // Abrir/Cerrar modal de registro
+        document.getElementById('mostrar-registro').addEventListener('click', function() {
+            document.getElementById('registro-modal').classList.remove('hidden');
+        });
+
+        document.getElementById('cerrar-registro').addEventListener('click', function() {
+            document.getElementById('registro-modal').classList.add('hidden');
+            document.getElementById('registroForm').reset();
+            document.getElementById('mensaje-registro').classList.add('hidden');
+        });
+
+        // Cerrar modal al hacer clic fuera
+        document.getElementById('registro-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.add('hidden');
+                document.getElementById('registroForm').reset();
+                document.getElementById('mensaje-registro').classList.add('hidden');
+            }
+        });
+
+        // Manejo del formulario de registro
+        document.getElementById('registroForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('reg-username').value;
+            const password = document.getElementById('reg-password').value;
+            const passwordConfirm = document.getElementById('reg-password-confirm').value;
+            const registroButton = document.getElementById('registroButton');
+            const mensajeDiv = document.getElementById('mensaje-registro');
+            
+            // Validar que las contraseñas coincidan
+            if (password !== passwordConfirm) {
+                mensajeDiv.classList.remove('hidden');
+                mensajeDiv.className = 'mb-4 p-3 rounded-lg bg-red-100 text-red-800 border border-red-300';
+                mensajeDiv.textContent = 'Las contraseñas no coinciden';
+                return;
+            }
+
+            // Deshabilitar botón
+            registroButton.disabled = true;
+            registroButton.textContent = 'Registrando...';
+            registroButton.classList.add('opacity-50', 'cursor-not-allowed');
+            
+            // Limpiar mensaje anterior
+            mensajeDiv.classList.add('hidden');
+            
+            try {
+                const response = await fetch('/registro', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        username: username, 
+                        password: password 
+                    })
+                });
+
+                const data = await response.json();
+                
+                // Mostrar mensaje
+                mensajeDiv.classList.remove('hidden');
+                mensajeDiv.textContent = data.mensaje;
+                
+                if (response.ok) {
+                    // Registro exitoso
+                    mensajeDiv.className = 'mb-4 p-3 rounded-lg bg-green-100 text-green-800 border border-green-300';
+                    
+                    // Limpiar formulario
+                    document.getElementById('registroForm').reset();
+                    
+                    // Cerrar modal después de 2 segundos
+                    setTimeout(function() {
+                        document.getElementById('registro-modal').classList.add('hidden');
+                        mensajeDiv.classList.add('hidden');
+                    }, 2000);
+                    
+                } else {
+                    // Registro fallido
+                    mensajeDiv.className = 'mb-4 p-3 rounded-lg bg-red-100 text-red-800 border border-red-300';
+                }
+                
+            } catch (error) {
+                console.error('Error:', error);
+                
+                mensajeDiv.classList.remove('hidden');
+                mensajeDiv.className = 'mb-4 p-3 rounded-lg bg-red-100 text-red-800 border border-red-300';
+                mensajeDiv.textContent = 'Error al conectar con el servidor';
+            } finally {
+                // Rehabilitar botón
+                registroButton.disabled = false;
+                registroButton.textContent = 'Registrarse';
+                registroButton.classList.remove('opacity-50', 'cursor-not-allowed');
+            }
+        });
+
+        // Función para agregar producto al carrito CON VALIDACIÓN DE STOCK
+        function agregarAlCarrito(id, nombre, precio, imagen_url, cantidadDisponible) {
+            const productoExistente = carrito.find(item => item.id === id);
+            
+            if (productoExistente) {
+                // Verificar si hay stock suficiente antes de incrementar
+                if (productoExistente.cantidad >= cantidadDisponible) {
+                    alert(`No hay más stock disponible de ${nombre}. Solo quedan ${cantidadDisponible} unidades.`);
+                    return;
+                }
+                productoExistente.cantidad++;
+            } else {
+                // Verificar stock disponible antes de agregar
+                if (cantidadDisponible <= 0) {
+                    alert(`${nombre} está agotado.`);
+                    return;
+                }
+                
+                carrito.push({
+                    id: id,
+                    nombre: nombre,
+                    precio: parseFloat(precio),
+                    imagen_url: imagen_url,
+                    cantidad: 1,
+                    cantidadDisponible: cantidadDisponible
+                });
+            }
+            
+            actualizarCarrito();
+            mostrarNotificacion(`${nombre} agregado al carrito`);
+        }
+
+        // Función para actualizar el carrito visual
+        function actualizarCarrito() {
+            const carritoItems = document.getElementById('carrito-items');
+            const carritoCount = document.getElementById('carrito-count');
+            const totalProductos = document.getElementById('total-productos');
+            const totalPrecio = document.getElementById('total-precio');
+            
+            // Calcular totales
+            const cantidadTotal = carrito.reduce((sum, item) => sum + item.cantidad, 0);
+            const precioTotal = carrito.reduce((sum, item) => sum + (item.precio * item.cantidad), 0);
+            
+            // Actualizar badge del carrito
+            if (cantidadTotal > 0) {
+                carritoCount.textContent = cantidadTotal;
+                carritoCount.classList.remove('hidden');
+            } else {
+                carritoCount.classList.add('hidden');
+            }
+            
+            // Actualizar totales
+            totalProductos.textContent = cantidadTotal;
+            totalPrecio.textContent = `$${precioTotal.toFixed(2)}`;
+            
+            // Actualizar lista de items
+            if (carrito.length === 0) {
+                carritoItems.innerHTML = '<p class="text-center text-stone-600">El carrito está vacío</p>';
+            } else {
+                carritoItems.innerHTML = carrito.map(item => `
+                    <div class="flex items-center gap-4 bg-stone-50 p-4 rounded-lg">
+                        <img src="${item.imagen_url || 'https://via.placeholder.com/80'}" 
+                             alt="${item.nombre}" 
+                             class="w-16 h-16 object-cover rounded"
+                             onerror="this.src='https://via.placeholder.com/80'">
+                        <div class="flex-1">
+                            <h4 class="font-light">${item.nombre}</h4>
+                            <p class="text-sm text-stone-600">$${item.precio.toFixed(2)} x ${item.cantidad}</p>
+                            <p class="text-xs text-stone-500">Disponible: ${item.cantidadDisponible}</p>
+                            <p class="text-sm font-light">Subtotal: $${(item.precio * item.cantidad).toFixed(2)}</p>
+                        </div>
+                        <div class="flex flex-col gap-2">
+                            <button onclick="cambiarCantidad(${item.id}, 1)" class="px-2 py-1 bg-green-600 text-white text-xs rounded hover:bg-green-700">+</button>
+                            <button onclick="cambiarCantidad(${item.id}, -1)" class="px-2 py-1 bg-yellow-600 text-white text-xs rounded hover:bg-yellow-700">-</button>
+                            <button onclick="eliminarDelCarrito(${item.id})" class="px-2 py-1 bg-red-600 text-white text-xs rounded hover:bg-red-700">🗑️</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Función para cambiar cantidad CON VALIDACIÓN DE STOCK
+        function cambiarCantidad(id, cambio) {
+            const producto = carrito.find(item => item.id === id);
+            if (producto) {
+                const nuevaCantidad = producto.cantidad + cambio;
+                
+                // Validar que no exceda el stock disponible
+                if (nuevaCantidad > producto.cantidadDisponible) {
+                    alert(`No puedes agregar más de ${producto.cantidadDisponible} unidades de ${producto.nombre}.`);
+                    return;
+                }
+                
+                producto.cantidad = nuevaCantidad;
+                
+                if (producto.cantidad <= 0) {
+                    eliminarDelCarrito(id);
+                } else {
+                    actualizarCarrito();
+                }
+            }
+        }
+
+        // Función para eliminar producto del carrito
+        function eliminarDelCarrito(id) {
+            carrito = carrito.filter(item => item.id !== id);
+            actualizarCarrito();
+        }
+
+        // Función para vaciar el carrito
+        document.getElementById('vaciar-carrito').addEventListener('click', function() {
+            if (confirm('¿Estás seguro de vaciar el carrito?')) {
+                carrito = [];
+                actualizarCarrito();
+                mostrarNotificacion('Carrito vaciado');
+            }
+        });
+
+        // Función para guardar carrito en base de datos
+        document.getElementById('guardar-carrito').addEventListener('click', async function() {
+            if (carrito.length === 0) {
+                alert('El carrito está vacío');
+                return;
+            }
+
+            if (!confirm('¿Deseas guardar el pedido en la base de datos?')) {
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/carrito/guardar', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ productos: carrito })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    alert(data.mensaje || 'Pedido guardado correctamente');
+                    carrito = [];
+                    actualizarCarrito();
+                    cerrarCarritoPanel();
+                    await cargarProductos(); // Recargar productos para actualizar stock
+                } else {
+                    alert(data.error || 'Error al guardar el pedido');
+                }
+
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error al conectar con el servidor');
+            }
+        });
+
+        // Función para mostrar notificación
+        function mostrarNotificacion(mensaje) {
+            const notif = document.createElement('div');
+            notif.className = 'fixed top-20 right-4 bg-green-600 text-white px-6 py-3 rounded-lg shadow-lg z-50';
+            notif.textContent = mensaje;
+            document.body.appendChild(notif);
+            
+            setTimeout(() => {
+                notif.remove();
+            }, 2000);
+        }
+
+        // Abrir/Cerrar panel del carrito
+        document.getElementById('carritoBtn').addEventListener('click', function() {
+            document.getElementById('carrito-panel').classList.remove('translate-x-full');
+            document.getElementById('carrito-overlay').classList.remove('hidden');
+        });
+
+        function cerrarCarritoPanel() {
+            document.getElementById('carrito-panel').classList.add('translate-x-full');
+            document.getElementById('carrito-overlay').classList.add('hidden');
+        }
+
+        document.getElementById('cerrar-carrito').addEventListener('click', cerrarCarritoPanel);
+        document.getElementById('carrito-overlay').addEventListener('click', cerrarCarritoPanel);
+
+        // Función para cargar productos desde la base de datos
+        async function cargarProductos() {
+            try {
+                const response = await fetch('/api/productos');
+                
+                if (!response.ok) {
+                    throw new Error('Error al cargar productos');
+                }
+                
+                const productos = await response.json();
+                const container = document.getElementById('productos-container');
+                
+                // Limpiar contenedor
+                container.innerHTML = '';
+                
+                // Crear tarjeta para cada producto
+                productos.forEach(producto => {
+                    const article = document.createElement('article');
+                    article.className = 'bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition-shadow';
+                    
+                    const cantidadDisponible = producto.cantidad || 0;
+                    const agotado = cantidadDisponible <= 0;
+                    
+                    article.innerHTML = `
+                        <div class="aspect-square overflow-hidden bg-stone-100 relative">
+                            <img src="${producto.imagen_url || 'https://via.placeholder.com/400?text=Sin+Imagen'}" 
+                                 alt="${producto.nombre}" 
+                                 class="w-full h-full object-cover hover:scale-105 transition-transform duration-500 ${agotado ? 'opacity-50' : ''}"
+                                 onerror="this.src='https://via.placeholder.com/400?text=Sin+Imagen'">
+                            ${agotado ? '<div class="absolute inset-0 flex items-center justify-center bg-black/50"><span class="text-white text-2xl font-bold">AGOTADO</span></div>' : ''}
+                        </div>
+                        <div class="p-6">
+                            <h3 class="text-2xl font-light mb-2">${producto.nombre}</h3>
+                            <p class="text-stone-600 mb-2">${producto.descripcion || 'Sin descripción disponible'}</p>
+                            
+                            <!-- Mostrar cantidad disponible -->
+                            <p class="text-sm mb-4 ${agotado ? 'text-red-600 font-semibold' : 'text-green-600'}">
+                                ${agotado ? '❌ Sin stock' : `✅ Disponible: ${cantidadDisponible} unidades`}
+                            </p>
+                            
+                            <div class="flex justify-between items-center mb-4">
+                                <p class="text-xl font-light">$${parseFloat(producto.precio).toFixed(2)}</p>
+                            </div>
+                            
+                            <!-- Botón Agregar al Carrito -->
+                            <button 
+                                onclick='agregarAlCarrito(${producto.id}, "${producto.nombre.replace(/'/g, "\\'")}", ${producto.precio}, "${producto.imagen_url || ''}", ${cantidadDisponible})' 
+                                class="w-full px-4 py-2 text-sm rounded-lg transition-colors ${agotado ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700'} text-white"
+                                ${agotado ? 'disabled' : ''}>
+                                ${agotado ? '❌ Agotado' : '🛒 Agregar al Carrito'}
+                            </button>
+                        </div>
+                    `;
+                    
+                    container.appendChild(article);
+                });
+                
+                // Si no hay productos, mostrar mensaje
+                if (productos.length === 0) {
+                    container.innerHTML = '<p class="text-center text-stone-600 col-span-full text-lg">No hay productos disponibles en este momento.</p>';
+                }
+                
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('productos-container').innerHTML = 
+                    '<p class="text-center text-red-600 col-span-full text-lg">Error al cargar los productos. Intenta recargar la página.</p>';
+            }
+        }
+        
+        // Cargar productos cuando se carga la página
+        document.addEventListener('DOMContentLoaded', cargarProductos);
+
+        // Manejo del login
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const loginButton = document.getElementById('loginButton');
+            const mensajeDiv = document.getElementById('mensaje');
+            
+            // Deshabilitar botón
+            loginButton.disabled = true;
+            loginButton.textContent = 'Iniciando sesión...';
+            loginButton.classList.add('opacity-50', 'cursor-not-allowed');
+            
+            // Limpiar mensaje anterior
+            mensajeDiv.classList.add('hidden');
+            
+            fetch('/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ username: username, password: password })
+            })
+            .then(function(response) {
+                return response.json().then(function(data) {
+                    return { status: response.status, data: data };
+                });
+            })
+            .then(function(result) {
+                // Mostrar mensaje
+                mensajeDiv.classList.remove('hidden');
+                mensajeDiv.textContent = result.data.mensaje;
+                
+                if (result.status === 200) {
+                    // Login exitoso
+                    mensajeDiv.className = 'mb-4 p-3 rounded-lg bg-green-100 text-green-800 border border-green-300';
+                    
+                    setTimeout(function() {
+                        window.location.href = result.data.redirect;
+                    }, 500);
+                    
+                } else {
+                    // Login fallido
+                    mensajeDiv.className = 'mb-4 p-3 rounded-lg bg-red-100 text-red-800 border border-red-300';
+                    
+                    // Rehabilitar botón
+                    loginButton.disabled = false;
+                    loginButton.textContent = 'Entrar';
+                    loginButton.classList.remove('opacity-50', 'cursor-not-allowed');
+                }
+            })
+            .catch(function(error) {
+                console.error('Error:', error);
+                
+                mensajeDiv.classList.remove('hidden');
+                mensajeDiv.className = 'mb-4 p-3 rounded-lg bg-red-100 text-red-800 border border-red-300';
+                mensajeDiv.textContent = 'Error al conectar con el servidor. Intenta nuevamente.';
+                
+                // Rehabilitar botón
+                loginButton.disabled = false;
+                loginButton.textContent = 'Entrar';
+                loginButton.classList.remove('opacity-50', 'cursor-not-allowed');
+            });
+        });
+    </script>
+</body>
+</html>
