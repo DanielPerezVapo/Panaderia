@@ -15,7 +15,19 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 
-const pool = mysql.createPool({
+// DEBUG: Mostrar variables de entorno (sin password completa)
+console.log('🔍 Variables de entorno MySQL detectadas:')
+console.log('   MYSQL_HOST:', process.env.MYSQL_HOST || 'undefined')
+console.log('   MYSQLHOST:', process.env.MYSQLHOST || 'undefined')
+console.log('   MYSQL_PORT:', process.env.MYSQL_PORT || 'undefined')
+console.log('   MYSQLPORT:', process.env.MYSQLPORT || 'undefined')
+console.log('   MYSQL_USER:', process.env.MYSQL_USER || 'undefined')
+console.log('   MYSQLUSER:', process.env.MYSQLUSER || 'undefined')
+console.log('   MYSQL_DATABASE:', process.env.MYSQL_DATABASE || 'undefined')
+console.log('   MYSQLDATABASE:', process.env.MYSQLDATABASE || 'undefined')
+console.log('   PASSWORD exists:', !!(process.env.MYSQL_PASSWORD || process.env.MYSQLPASSWORD))
+
+const dbConfig = {
   host: process.env.MYSQL_HOST || process.env.MYSQLHOST,
   port: process.env.MYSQL_PORT || process.env.MYSQLPORT || 3306,
   user: process.env.MYSQL_USER || process.env.MYSQLUSER,
@@ -25,7 +37,15 @@ const pool = mysql.createPool({
   connectionLimit: 10,
   queueLimit: 0,
   connectTimeout: 60000
-})
+}
+
+console.log('🔧 Configuración MySQL final:')
+console.log('   Host:', dbConfig.host)
+console.log('   Port:', dbConfig.port)
+console.log('   User:', dbConfig.user)
+console.log('   Database:', dbConfig.database)
+
+const pool = mysql.createPool(dbConfig)
 
 // Verificar conexión a la base de datos al iniciar
 pool.getConnection()
