@@ -27,9 +27,15 @@ console.log('   MYSQL_DATABASE:', process.env.MYSQL_DATABASE || 'undefined')
 console.log('   MYSQLDATABASE:', process.env.MYSQLDATABASE || 'undefined')
 console.log('   PASSWORD exists:', !!(process.env.MYSQL_PASSWORD || process.env.MYSQLPASSWORD))
 
+// Obtener puerto y convertir a número
+const portFromEnv = process.env.MYSQL_PORT || process.env.MYSQLPORT;
+const mysqlPort = portFromEnv ? parseInt(portFromEnv, 10) : 3306;
+
+console.log('🔧 Puerto detectado:', portFromEnv, '→ convertido a:', mysqlPort);
+
 const dbConfig = {
   host: process.env.MYSQL_HOST || process.env.MYSQLHOST,
-  port: process.env.MYSQL_PORT || process.env.MYSQLPORT || 3306,
+  port: mysqlPort,
   user: process.env.MYSQL_USER || process.env.MYSQLUSER,
   password: process.env.MYSQL_PASSWORD || process.env.MYSQLPASSWORD,
   database: process.env.MYSQL_DATABASE || process.env.MYSQLDATABASE,
@@ -41,7 +47,7 @@ const dbConfig = {
 
 console.log('🔧 Configuración MySQL final:')
 console.log('   Host:', dbConfig.host)
-console.log('   Port:', dbConfig.port)
+console.log('   Port:', dbConfig.port, '(type:', typeof dbConfig.port, ')')
 console.log('   User:', dbConfig.user)
 console.log('   Database:', dbConfig.database)
 
