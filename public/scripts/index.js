@@ -147,9 +147,10 @@ async function cargarMisPedidos() {
 // Actualizar UI cuando hay sesión activa
 function actualizarUIConSesion(username, isAdmin) {
     const sesionContainer = document.getElementById('sesion-container');
+    const sesionContainerMobile = document.getElementById('sesion-container-mobile');
     const loginContainer = document.getElementById('login-container');
     
-    // Reemplazar botón de login por botón de usuario y cerrar sesión
+    // Reemplazar botón de login por botón de usuario y cerrar sesión (DESKTOP)
     sesionContainer.innerHTML = `
         <div class="flex items-center gap-4">
             <span class="text-stone-700 font-light">👤 ${username}</span>
@@ -159,6 +160,19 @@ function actualizarUIConSesion(username, isAdmin) {
             </button>
         </div>
     `;
+
+    // Actualizar menú MÓVIL
+    if (sesionContainerMobile) {
+        sesionContainerMobile.innerHTML = `
+            <div class="flex flex-col gap-2">
+                <span class="block text-stone-700 font-light py-2">👤 ${username}</span>
+                ${isAdmin ? '<a href="/index2.html" class="block px-4 py-2 bg-stone-800 text-white rounded-lg hover:bg-stone-700 transition-colors text-sm text-center">Panel Admin</a>' : ''}
+                <button id="logout-btn-mobile" class="w-full px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors text-sm">
+                    Cerrar Sesión
+                </button>
+            </div>
+        `;
+    }
 
     // Ocultar formulario de login
     if (loginContainer) {
@@ -174,8 +188,9 @@ function actualizarUIConSesion(username, isAdmin) {
         `;
     }
 
-    // Agregar evento al botón de cerrar sesión
+    // Agregar evento al botón de cerrar sesión (desktop y móvil)
     document.getElementById('logout-btn')?.addEventListener('click', cerrarSesion);
+    document.getElementById('logout-btn-mobile')?.addEventListener('click', cerrarSesion);
 }
 
 // Función para cerrar sesión
