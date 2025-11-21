@@ -7,7 +7,7 @@ function validarNombreSeguro(valor) {
 document.addEventListener('DOMContentLoaded', function() {
 
 
-    var formAgregar = document.querySelector('form[action="/agregarUsuario"]');
+    var formAgregar = document.querySelector('form[action="/agregarUsuario"]')
     if (formAgregar) {
         formAgregar.addEventListener('submit', function(e) {
             var nombre = document.getElementById('nombre').value;    
