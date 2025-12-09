@@ -128,22 +128,31 @@ async function cargarMisPedidos() {
                                 <p class="font-light">$${parseFloat(item.precio).toFixed(2)} c/u</p>
                                 <p class="text-sm text-stone-600">Subtotal: $${(parseFloat(item.precio) * parseInt(item.cantidad)).toFixed(2)}</p>
                             </div>
-                            
                         </div>
-                        <button id="ticket" class="ml-4 text-red-600 hover:text-red-800 text-xl" title="Eliminar pedido" onclick="eliminarPedido(${item.id_pedido})">
+                        <button class="ticket-btn ml-4 text-blue-600 hover:text-blue-800 text-xl" 
+                                data-pedido="${item.id_pedido}"
+                                data-nombre="${item.nombre}"
+                                data-precio="${item.precio}"
+                                data-cantidad="${item.cantidad}"
+                                title="Imprimir ticket">
                             Imprimir Ticket🧾
-                            </button>
+                        </button>
                     `).join('')}
                 </div>
             </div>
-            <script>
-                document.getElementById('ticket').addEventListener('click', () => {
-                    console.log('Imprimiendo ticket...');
-                    generarDatosDelTicket(${pedidosArray.length - index, item.nombre, item.precio, item.cantidad});
-                });
-            </script>
         `).join('');
 
+        // Agregar event listeners a los botones de ticket
+        document.querySelectorAll('.ticket-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const pedidoId = btn.dataset.pedido;
+                const nombre = btn.dataset.nombre;
+                const precio = btn.dataset.precio;
+                const cantidad = btn.dataset.cantidad;
+                console.log('Imprimiendo ticket...');
+                generarDatosDelTicket(pedidoId, nombre, precio, cantidad);
+            });
+        });
 
         
         
