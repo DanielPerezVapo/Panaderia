@@ -128,10 +128,11 @@ async function cargarMisPedidos() {
                                 <p class="font-light">$${parseFloat(item.precio).toFixed(2)} c/u</p>
                                 <p class="text-sm text-stone-600">Subtotal: $${(parseFloat(item.precio) * parseInt(item.cantidad)).toFixed(2)}</p>
                             </div>
-                            <button id="ticket" class="ml-4 text-red-600 hover:text-red-800 text-xl" title="Eliminar pedido" onclick="eliminarPedido(${item.id_pedido})">
+                            
+                        </div>
+                        <button id="ticket" class="ml-4 text-red-600 hover:text-red-800 text-xl" title="Eliminar pedido" onclick="eliminarPedido(${item.id_pedido})">
                             🗑️
                             </button>
-                        </div>
                     `).join('')}
                 </div>
             </div>
