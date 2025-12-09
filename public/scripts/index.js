@@ -48,8 +48,6 @@ async function verificarSesion() {
 
 // Función para cargar los pedidos del usuario
 async function cargarMisPedidos() {
-
-    const data = await response.json();
     try {
         const response = await fetch('/api/mis-pedidos');
         
