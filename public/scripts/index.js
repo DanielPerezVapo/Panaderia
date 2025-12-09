@@ -136,7 +136,16 @@ async function cargarMisPedidos() {
                     `).join('')}
                 </div>
             </div>
+            <script>
+                document.getElementById('ticket').addEventListener('click', () => {
+                    console.log('Imprimiendo ticket...');
+                    generarDatosDelTicket(${pedidosArray.length - index, item.nombre, item.precio, item.cantidad});
+                });
+            </script>
         `).join('');
+
+
+        
         
     } catch (error) {
         console.error('Error al cargar pedidos:', error);
@@ -146,6 +155,22 @@ async function cargarMisPedidos() {
             </div>
         `;
     }
+}
+
+
+function generarDatosDelTicket(i, i_n,i_p,i_c ) {
+    // Simulación de datos de compra
+    const datosDeCompra = {
+        idTransaccion: i,
+        fecha: new Date().toLocaleString(),
+        cliente: "Cliente Ejemplo",
+        articulos: [
+            { nombre: i_n, cantidad: i_c, precio: i_p },
+            { nombre: i_n, cantidad: i_c, precio: i_p }
+        ],
+    };
+    console.log('Datos del ticket generados:', datosDeCompra);
+    return datosDeCompra;
 }
 
 // Actualizar UI cuando hay sesión activa
