@@ -48,6 +48,8 @@ async function verificarSesion() {
 
 // Función para cargar los pedidos del usuario
 async function cargarMisPedidos() {
+
+    const data = await response.json();
     try {
         const response = await fetch('/api/mis-pedidos');
         
@@ -134,6 +136,7 @@ async function cargarMisPedidos() {
                                 data-nombre="${item.nombre}"
                                 data-precio="${item.precio}"
                                 data-cantidad="${item.cantidad}"
+                                data-usuario="${data.username}"
                                 title="Imprimir ticket">
                             Imprimir Ticket🧾
                         </button>
@@ -149,8 +152,9 @@ async function cargarMisPedidos() {
                 const nombre = btn.dataset.nombre;
                 const precio = btn.dataset.precio;
                 const cantidad = btn.dataset.cantidad;
+                const usuario = btn.dataset.usuario;
                 console.log('Imprimiendo ticket...');
-                generarDatosDelTicket(pedidoId, nombre, precio, cantidad);
+                generarDatosDelTicket(pedidoId, nombre, precio, cantidad, usuario);
             });
         });
 
@@ -167,12 +171,12 @@ async function cargarMisPedidos() {
 }
 
 
-function generarDatosDelTicket(i, i_n,i_p,i_c ) {
+function generarDatosDelTicket(i, i_n,i_p,i_c, i_u) {
     // Simulación de datos de compra
     const datosDeCompra = {
         idTransaccion: i,
         fecha: new Date().toLocaleString(),
-        cliente: "Cliente Ejemplo",
+        cliente: i_u,
         articulos: [
             { nombre: i_n, cantidad: i_c, precio: i_p },
             { nombre: i_n, cantidad: i_c, precio: i_p }
