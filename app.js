@@ -17,7 +17,7 @@ app.use(express.urlencoded({ extended: true }))
 
 // DEBUG: Mostrar variables de entorno (sin password completa)
 console.log('🔍 Variables de entorno MySQL detectadas:')
-console.log('   MYSQL_HOST:', process.env.MYSQL_HOST || 'undefined')
+console.log('   MYSQL_HOST:', 'tranvía.proxy.rlwy.net' || 'undefined')
 console.log('   MYSQLHOST:', process.env.MYSQLHOST || 'undefined')
 console.log('   MYSQL_PORT:', process.env.MYSQL_PORT || 'undefined')
 console.log('   MYSQLPORT:', process.env.MYSQLPORT || 'undefined')
