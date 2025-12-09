@@ -134,7 +134,7 @@ async function cargarMisPedidos() {
                                 data-nombre="${item.nombre}"
                                 data-precio="${item.precio}"
                                 data-cantidad="${item.cantidad}"
-                                data-usuario="${data.username}"
+                                data-usuario="${usuarioActual}"
                                 title="Imprimir ticket">
                             Imprimir Ticket🧾
                         </button>
