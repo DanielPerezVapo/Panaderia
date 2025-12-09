@@ -131,7 +131,7 @@ async function cargarMisPedidos() {
                             
                         </div>
                         <button id="ticket" class="ml-4 text-red-600 hover:text-red-800 text-xl" title="Eliminar pedido" onclick="eliminarPedido(${item.id_pedido})">
-                            🗑️
+                            Imprimir Ticket🧾
                             </button>
                     `).join('')}
                 </div>
