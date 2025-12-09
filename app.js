@@ -63,8 +63,8 @@ pool.getConnection()
   })
   .catch(err => {
     console.error('❌ Error al conectar a MySQL:', err.message)
-    console.error('   Host intentado:', process.env.MYSQL_HOST || process.env.MYSQLHOST)
-    console.error('   Port intentado:', process.env.MYSQL_PORT || process.env.MYSQLPORT || 44431)
+    console.error('   Host intentado:', process.env.MYSQL_HOST || process.env.MYSQLHOST || 'tranvía.proxy.rlwy.net')
+    console.error('   Port intentado:', process.env.MYSQL_PORT || process.env.MYSQLPORT || 55194)
   })
 
 const sessionStore = new MySQLStore({}, pool)
