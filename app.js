@@ -29,7 +29,7 @@ console.log('   PASSWORD exists:', !!(process.env.MYSQL_PASSWORD || process.env.
 
 // Obtener puerto y convertir a número
 const portFromEnv = process.env.MYSQL_PORT || process.env.MYSQLPORT;
-const mysqlPort = portFromEnv ? parseInt(portFromEnv, 10) : 44431;
+const mysqlPort = portFromEnv ? parseInt(portFromEnv, 10) : 55194;
 
 console.log('🔧 Puerto detectado:', portFromEnv, '→ convertido a:', mysqlPort);
 
@@ -530,7 +530,7 @@ app.get('/api/pedidos', requireAuth, requireAdmin, async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 55194
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`)
 })
