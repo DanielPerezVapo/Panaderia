@@ -129,7 +129,10 @@ async function cargarMisPedidos() {
                                 <p class="text-sm text-stone-600">Subtotal: $${(parseFloat(item.precio) * parseInt(item.cantidad)).toFixed(2)}</p>
                             </div>
                         </div>
-                        <button class="ticket-btn ml-4 text-blue-600 hover:text-blue-800 text-xl" 
+                        
+                    `).join('')}
+                </div>
+                <button class="ticket-btn ml-4 text-blue-600 hover:text-blue-800 text-xl" 
                                 data-pedido="${pedidosArray.length - index}"
                                 data-nombre="${item.nombre}"
                                 data-precio="${item.precio}"
@@ -141,8 +144,6 @@ async function cargarMisPedidos() {
                         <div id="area-ticket" style="display: none; border: 1px solid #ccc; padding: 20px; width: 300px; font-family: monospace;">
                         
                         </div>
-                    `).join('')}
-                </div>
             </div>
         `).join('');
 
