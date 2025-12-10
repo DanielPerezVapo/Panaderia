@@ -297,7 +297,7 @@ async function obtenerFondos() {
     try {
         const response = await fetch(`/api/producto/fondos`);
         const producto = await response.json();
-        console.log(producto);
+        console.log(producto + "Hola");
         return producto;
     } catch (error) {
         console.error('Error al obtener producto:', error);
