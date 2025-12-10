@@ -693,7 +693,7 @@ document.getElementById('guardar-carrito').addEventListener('click', async funct
         const data = await response.json();
 
         if (response.ok) {
-            alert(`${data.mensaje}\n\nGracias por tu pedido, ${usuarioActual}!`);
+            alert(`${data.mensaje}\n\nTotal gastado: $${data.totalGastado}\nFondos restantes: $${data.fondosRestantes}\n\n¡Gracias por tu pedido, ${usuarioActual}!`);
             carrito = [];
             actualizarCarrito();
             cerrarCarritoPanel();
@@ -702,10 +702,17 @@ document.getElementById('guardar-carrito').addEventListener('click', async funct
             // Recargar pedidos del usuario
             await cargarMisPedidos();
             
-            // Scroll a "Mis Pedidos"
-            document.getElementById('mis-pedidos')?.scrollIntoView({ behavior: 'smooth' });
+            // Recargar página para actualizar fondos
+            setTimeout(() => {
+                location.reload();
+            }, 1000);
         } else {
-            alert(data.error || 'Error al guardar el pedido');
+            // Mostrar mensaje de error específico
+            if (data.error === 'Fondos insuficientes') {
+                alert(`❌ ${data.mensaje}\n\nTe faltan: $${data.faltante}\n\nPor favor, agrega fondos a tu cuenta antes de continuar.`);
+            } else {
+                alert(data.error || 'Error al guardar el pedido');
+            }
         }
 
     } catch (error) {

@@ -227,7 +227,7 @@ app.post('/api/usuario/agregar-fondos', async (req, res) => {
       [req.session.userId]
     );
 
-    
+
     
     console.log('   Nuevos fondos:', rows[0]?.fondos);
 
@@ -375,6 +375,26 @@ app.post('/api/carrito/guardar', async (req, res) => {
       cantidad: parseInt(sanitizar(String(p.cantidad || '0'))) || 0
     }))
 
+    // Calcular el total del carrito
+    const totalCarrito = productos.reduce((sum, p) => sum + (p.precio * p.cantidad), 0);
+    
+    // Obtener fondos del usuario
+    const [userRows] = await pool.query(
+      'SELECT fondos FROM usuario WHERE id = ?',
+      [usuarioId]
+    );
+    
+    const fondosUsuario = userRows[0]?.fondos || 0;
+    
+    // Validar que el usuario tenga fondos suficientes
+    if (fondosUsuario < totalCarrito) {
+      return res.status(400).json({ 
+        error: 'Fondos insuficientes',
+        mensaje: `No tienes fondos suficientes. Necesitas $${totalCarrito.toFixed(2)} pero solo tienes $${fondosUsuario.toFixed(2)}`,
+        faltante: (totalCarrito - fondosUsuario).toFixed(2)
+      });
+    }
+
     connection = await pool.getConnection();
     await connection.beginTransaction();
 
@@ -413,12 +433,20 @@ app.post('/api/carrito/guardar', async (req, res) => {
       );
     }
 
+    // Descontar fondos del usuario
+    await connection.query(
+      'UPDATE usuario SET fondos = fondos - ? WHERE id = ?',
+      [totalCarrito, usuarioId]
+    );
+
     await connection.commit();
-    console.log(`[PEDIDO] Usuario: ${username} (ID: ${usuarioId}) - Guardó pedido con ${productos.length} productos`);
+    console.log(`[PEDIDO] Usuario: ${username} (ID: ${usuarioId}) - Guardó pedido con ${productos.length} productos - Total: $${totalCarrito.toFixed(2)}`);
 
     res.json({
       success: true,
-      mensaje: 'Pedido guardado correctamente y stock actualizado'
+      mensaje: 'Pedido guardado correctamente y stock actualizado',
+      totalGastado: totalCarrito.toFixed(2),
+      fondosRestantes: (fondosUsuario - totalCarrito).toFixed(2)
     })
 
   } catch (error) {
