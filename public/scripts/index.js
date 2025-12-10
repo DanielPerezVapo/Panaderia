@@ -276,6 +276,13 @@ function actualizarUIConSesion(username, isAdmin) {
                 <a href="#mis-pedidos" class="inline-block px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors mb-3">
                     📦 Ver Mis Pedidos
                 </a>
+
+                <div class="my-4 border-t border-stone-300" style="display: flex; align-items: center; justify-content: center; flex-direction: column;">
+                    Fondos disponibles: 
+                    <button onclick="AgregarFondos()" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+                    Agregar Fondos
+                    </button>
+                </div>
                 ${isAdmin ? '<a href="/index2.html" class="inline-block px-6 py-3 bg-stone-800 text-white rounded-lg hover:bg-stone-700 transition-colors ml-3">Ir al Panel de Administración</a>' : ''}
             </div>
         `;
