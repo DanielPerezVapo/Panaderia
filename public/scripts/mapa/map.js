@@ -14,18 +14,9 @@ map.on('locationfound', e => {
     const marker = L.marker(coords);
     marker.bindPopup('Estoy aquí');
     map.addLayer(marker);
-    socket.emit('userCoordinates', coords);
+    console.log('Tu ubicación:', coords);
 });
 
+// Marcador de la panadería
 var marcador = L.marker([19.418199, -99.096393]).addTo(map);
 marcador.bindPopup('Panaderia');
-
-
-
-socket.on('userNewCoordinates',(coords)=>{
-	console.log('nuevo usuario conectado');
-	const marker=L.marker([52,-0.9]);
-	marker.bindPopup('HolixD');
-	map.addLayer(marker);
-	//map.addLayeuserNewCoordinates(marker);
-});
