@@ -267,6 +267,18 @@ function actualizarUIConSesion(username, isAdmin) {
         `;
     }
 
+    app.get('/api/producto/:id', async (req, res) => {
+    try {
+        const [rows] = await pool.query(
+            'SELECT * FROM usuario WHERE fondos = ?',
+            [req.params.fondos]
+        );
+        res.json(rows[0]);
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ error: 'Error en la consulta' });
+    }
+    });
     // Ocultar formulario de login
     if (loginContainer) {
         loginContainer.innerHTML = `
@@ -278,7 +290,7 @@ function actualizarUIConSesion(username, isAdmin) {
                 </a>
 
                 <div class="my-4 border-t border-stone-300" style="display: flex; align-items: center; justify-content: center; flex-direction: column;">
-                    Fondos disponibles: 
+                    Fondos disponibles: ${req.params.fondos} MXN
                     <button onclick="AgregarFondos()" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
                     Agregar Fondos
                     </button>
