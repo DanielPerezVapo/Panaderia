@@ -277,7 +277,7 @@ function actualizarUIConSesion(username, isAdmin) {
                 <a href="#mis-pedidos" class="inline-block px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors mb-3">
                     📦 Ver Mis Pedidos
                 </a>
-                <script>const fondos = obtenerFondos()</script> {
+                <script>const fondos = obtenerFondos()</script>
                 <div class="my-4 border-t border-stone-300" style="display: flex; align-items: center; justify-content: center; flex-direction: column;">
                     Fondos disponibles: ${fondos} MXN
                     <button onclick="AgregarFondos()" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
