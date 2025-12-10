@@ -142,6 +142,9 @@ async function cargarMisPedidos() {
                             title="Mostrar ticket">
                         Mostrar Ticket 🧾
                     </button>
+                    <button onclick="imprimirTicket(${pedidoIndex})" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+                            Imprimir 🖨️
+                        </button>
                 </div>
                 
                 <div id="area-ticket-${index}" class="area-ticket hidden mt-4 border border-stone-300 p-5 bg-white font-mono text-sm">
@@ -178,11 +181,6 @@ async function cargarMisPedidos() {
                     <p>-------------------------</p>
                     <h4>Total: $${total}</h4>
                     <p style="text-align: center;">--- ¡Gracias por su compra! ---</p>
-                    <div style="text-align: center; margin-top: 15px;">
-                        <button onclick="imprimirTicket(${pedidoIndex})" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
-                            Imprimir 🖨️
-                        </button>
-                    </div>
                 `;
 
                 areaTicket.innerHTML = contenidoHTML;
