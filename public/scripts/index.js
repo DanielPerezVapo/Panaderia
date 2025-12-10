@@ -179,7 +179,7 @@ async function cargarMisPedidos() {
                     <h4>Total: $${total}</h4>
                     <p style="text-align: center;">--- ¡Gracias por su compra! ---</p>
                     <div style="text-align: center; margin-top: 15px;">
-                        <button onclick="window.print()" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
+                        <button onclick="imprimirTicket()" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700">
                             Imprimir 🖨️
                         </button>
                     </div>
@@ -216,6 +216,19 @@ function generarDatosDelTicket(i, i_n,i_p,i_c, i_u) {
     };
     console.log('Datos del ticket generados:', datosDeCompra);
     return datosDeCompra;
+}
+
+function imprimirTicket() {
+
+    const elementosAImprimir = document.getElementById('area-ticket');
+    const contenidoOriginal = document.body.innerHTML;
+
+    document.body.innerHTML = elementosAImprimir.innerHTML;
+
+    // Abre el diálogo de impresión del navegador
+    window.print();
+
+    document.body.innerHTML = contenidoOriginal;
 }
 
 // Actualizar UI cuando hay sesión activa
