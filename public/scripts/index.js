@@ -609,10 +609,10 @@ function actualizarCarrito() {
     } else {
         carritoItems.innerHTML = carrito.map(item => `
             <div class="flex items-center gap-4 bg-stone-50 p-4 rounded-lg">
-                <img src="${item.imagen_url || 'https://via.placeholder.com/80'}" 
+                <img src="${item.imagen_url || 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect fill=%22%23ddd%22 width=%22100%22 height=%22100%22/%3E%3Ctext fill=%22%23999%22 x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22%3EImagen%3C/text%3E%3C/svg%3E'}" 
                      alt="${item.nombre}" 
                      class="w-16 h-16 object-cover rounded"
-                     onerror="this.src='https://via.placeholder.com/80'">
+                     onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22100%22%3E%3Crect fill=%22%23ddd%22 width=%22100%22 height=%22100%22/%3E%3Ctext fill=%22%23999%22 x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22%3EImagen%3C/text%3E%3C/svg%3E'">
                 <div class="flex-1">
                     <h4 class="font-light">${item.nombre}</h4>
                     <p class="text-sm text-stone-600">$${item.precio.toFixed(2)} x ${item.cantidad}</p>
@@ -797,10 +797,10 @@ async function cargarProductos() {
             
             article.innerHTML = `
                 <div class="aspect-square overflow-hidden bg-stone-100 relative">
-                    <img src="${producto.imagen_url || 'https://via.placeholder.com/400?text=Sin+Imagen'}" 
+                    <img src="${producto.imagen_url || 'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22400%22%3E%3Crect fill=%22%23e5e7eb%22 width=%22400%22 height=%22400%22/%3E%3Ctext fill=%22%23999%22 x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 font-size=%2224%22%3ESin Imagen%3C/text%3E%3C/svg%3E'}" 
                          alt="${producto.nombre}" 
                          class="w-full h-full object-cover hover:scale-105 transition-transform duration-500 ${agotado ? 'opacity-50' : ''}"
-                         onerror="this.src='https://via.placeholder.com/400?text=Sin+Imagen'">
+                         onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22400%22 height=%22400%22%3E%3Crect fill=%22%23e5e7eb%22 width=%22400%22 height=%22400%22/%3E%3Ctext fill=%22%23999%22 x=%2250%25%22 y=%2250%25%22 text-anchor=%22middle%22 dy=%22.3em%22 font-size=%2224%22%3ESin Imagen%3C/text%3E%3C/svg%3E'">
                     ${agotado ? '<div class="absolute inset-0 flex items-center justify-center bg-black/50"><span class="text-white text-2xl font-bold">AGOTADO</span></div>' : ''}
                 </div>
                 <div class="p-6">
